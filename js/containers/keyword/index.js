@@ -1,7 +1,11 @@
+// keyword 关键字回复
 import React, {Component} from 'react';
 
 
-export default class Home extends Component{
+import {Link} from 'react-router';
+
+
+export default class Keyword extends Component{
     constructor(props){
         super(props);
     }
@@ -9,7 +13,7 @@ export default class Home extends Component{
     render(){
         return (
             <div>
-                <div>Home</div>
+                <div>Keyword</div>
             </div>
         );
     }

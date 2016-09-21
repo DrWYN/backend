@@ -1,68 +1,35 @@
-import { Menu, Breadcrumb, Icon } from 'antd';
-import 'antd/dist/antd.css';
-import './app.scss';
 import React, { Component } from 'react';
+import { Menu, Breadcrumb, Icon } from 'antd';
+import './app.scss';
 
+import Sider from '../../components/Sider';
 
 
 const SubMenu = Menu.SubMenu;
 
 const App = React.createClass({
-  getInitialState() {
-    return {
-      collapse: true,
-    };
-  },
-  onCollapseChange() {
-    this.setState({
-      collapse: !this.state.collapse,
-    })
-  },
+
   render() {
-    const collapse = this.state.collapse;
     return (
-      <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
+      <div className="app-page-container">
+        <div className="ant-layout-header">微信平台</div>
         <aside className="ant-layout-sider">
-          <div className="ant-layout-logo"></div>
-          <Menu mode="inline" theme="dark" defaultSelectedKeys={['user']}>
-            <Menu.Item key="user">
-              <Icon type="user" /><span className="nav-text">导航一</span>
-            </Menu.Item>
-            <Menu.Item key="setting">
-              <Icon type="setting" /><span className="nav-text">导航二</span>
-            </Menu.Item>
-            <Menu.Item key="laptop">
-              <Icon type="laptop" /><span className="nav-text">导航三</span>
-            </Menu.Item>
-            <Menu.Item key="notification">
-              <Icon type="notification" /><span className="nav-text">导航四</span>
-            </Menu.Item>
-            <Menu.Item key="folder">
-              <Icon type="folder" /><span className="nav-text">导航五</span>
-            </Menu.Item>
-          </Menu>
-          <div className="ant-aside-action" onClick={this.onCollapseChange}>
-            {collapse ? <Icon type="right" /> : <Icon type="left" />}
-          </div>
+          <Sider/>
         </aside>
         <div className="ant-layout-main">
-          <div className="ant-layout-header"></div>
+          
           <div className="ant-layout-breadcrumb">
-            <Breadcrumb>
-              <Breadcrumb.Item>首页</Breadcrumb.Item>
-              <Breadcrumb.Item>应用列表</Breadcrumb.Item>
-              <Breadcrumb.Item>某应用</Breadcrumb.Item>
-            </Breadcrumb>
+            <Breadcrumb {...this.props} />
           </div>
           <div className="ant-layout-container">
             <div className="ant-layout-content">
               <div style={{ height: 220 }}>
-                内容区域
+                {this.props.children}
               </div>
             </div>
           </div>
           <div className="ant-layout-footer">
-          Ant Design 版权所有 © 2015 由蚂蚁金服体验技术部支持
+          © 2016 由 走客 支持
           </div>
         </div>
       </div>

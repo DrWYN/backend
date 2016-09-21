@@ -1,7 +1,11 @@
+// foreverMaterial 永久素材
 import React, {Component} from 'react';
 
 
-export default class Home extends Component{
+import {Link} from 'react-router';
+
+
+export default class ForeverMaterial extends Component{
     constructor(props){
         super(props);
     }
@@ -9,7 +13,7 @@ export default class Home extends Component{
     render(){
         return (
             <div>
-                <div>Home</div>
+                <div>ForeverMaterial</div>
             </div>
         );
     }
