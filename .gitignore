@@ -1,0 +1,17 @@
+.DS_Store
+.idea
+npm-debug.log
+#node_modules*
+/static
+img/sprite.png
+img/sprite@2x.png
+jsconfig.json
+.nyc_output
+dist
+node_modules_bis
+node_modules_r15
+tmp_eslintrc
+.jsbeautifyrc
+
+C
+
