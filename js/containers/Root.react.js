@@ -4,12 +4,10 @@ import {hashHistory} from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
-// import reducers from '../reducers';
-
 import App from './app/';
 
+import store from '../store/configureStore';
 
-// let store = createStore(reducers);
 
 const Home = (location, cb) => {
             require.ensure([], require => {
@@ -71,6 +69,7 @@ export default class Root extends Component {
     }
     render(){
         return (
+            <Provider  store={store}>
                 <Router history={hashHistory}>
                     <Route component={App}>
                         <Route name="home" breadcrumbName="/" path="/" getComponent={Home} />
@@ -85,16 +84,7 @@ export default class Root extends Component {
                         <Route path="*" getComponent={Home} />
                     </Route>
                 </Router>
+            </Provider>
         );
-        // return (
-        //     <Provider store={store}>
-        //         <Router history={hashHistory}>
-        //             <Route component={App}>
-        //                 <Route path="/" getComponent={Home} />
-        //                 <Route path="*" getComponent={Home} />
-        //             </Route>
-        //         </Router>
-        //     </Provider>
-        // );
     }
 }

@@ -1,19 +1,34 @@
 import React, {Component} from 'react';
 
+import { connect } from 'react-redux';
+import bindActions from '../actions/bind';
 
-export default class Home extends Component{
+
+class Home extends Component{
     constructor(props){
         super(props);
+    }
+    testClick(){
+        // bindActions.testAction('aaaa');
+        bindActions.apiAction();
     }
 
     render(){
         return (
             <div>
-                <div>Home</div>
+                <div onClick={this.testClick.bind(this)}>Home</div>
             </div>
         );
     }
 }
+
+function mapStateToProps(state){
+    return {
+        test: state.test
+    }
+}
+
+export default connect(mapStateToProps)(Home);
 
 
 
