@@ -1,7 +1,7 @@
 import {CALL_API} from '../middleware/api';
 
 export function testAction(text){
-	return {type: 'text_action', text};
+	return {type: 'text_action', text:text};
 }
 
 export function apiAction(){

@@ -16,15 +16,16 @@ class Home extends Component{
     render(){
         return (
             <div>
-                <div onClick={this.testClick.bind(this)}>Home</div>
+                <div onClick={this.testClick.bind(this)}>{this.props.text || 'home'}</div>
             </div>
         );
     }
 }
 
 function mapStateToProps(state){
+    let {text} = state.test;
     return {
-        test: state.test
+        text: text
     }
 }
 

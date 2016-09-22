@@ -1,7 +1,6 @@
 import Util from '../utils/Util';
 
 // Action key that carries API call info interpreted by this Redux middleware.
-// export const CALL_API = 'CALL_API';
 export const CALL_API = Symbol('Call API');
 
 function callApi(payload) {

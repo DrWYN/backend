@@ -1,47 +1,5 @@
 
 export default {
-    /**
-     * 刷新页面，route可以为空，会刷新当前页面
-     * @param nav
-     * @param route
-     */
-   refresh(nav, route) {
-
-        if (!route) {
-            let routes = nav.getCurrentRoutes();
-            let length = routes.length;
-            route = routes[length - 1]; // 使用当前页对应的route
-        }
-
-        // todo 最好的方式是直接使用route.page，但是不好使，这种写法只支持一层节点，如果有多层会有问题
-        // todo 暂时未处理page是function的情况
-        let Tag = route.component.type;
-        nav.replace({
-            component: <Tag {...route.component.props} />,
-        });
-
-    },
-    /**
-     * 跳转页面
-     * @param navigator 
-     * @param name 新页面名称
-     * @param component 新页面组件
-     * @param data 参数
-     * @param type 跳出方式  'Bottom' - 底部 默认右侧跳出
-     * @private
-     */
-    transform(navigator, name, component, data, type){
-      if(navigator&&component){
-        navigator.push({
-          name: name,
-          component: component,
-          params: {
-            data: data
-          },
-          type: type,
-        });
-      }
-    },
     //序列化对象
     serialize: function (obj, prefix) {
       var str = [];
