@@ -1,7 +1,7 @@
 .DS_Store
 .idea
 npm-debug.log
-#node_modules*
+node_modules*
 /static
 img/sprite.png
 img/sprite@2x.png
@@ -12,6 +12,4 @@ node_modules_bis
 node_modules_r15
 tmp_eslintrc
 .jsbeautifyrc
-
-C
 
