@@ -66,12 +66,16 @@ const ForeverMaterial = (location, cb) => {
 export default class Root extends Component {
     constructor(props){
         super(props);
+        this.canUse = this.canUse.bind(this);
+    }
+    canUse(){
+        console.log('------->>>>>权限验证，是否需要登录');
     }
     render(){
         return (
             <Provider  store={store}>
                 <Router history={hashHistory}>
-                    <Route component={App}>
+                    <Route onEnter={this.canUse} component={App}>
                         <Route name="home" breadcrumbName="/" path="/" getComponent={Home} />
                         <Route name="account" breadcrumbName="Account" path="account" getComponent={Account} />
                         <Route name="menu" breadcrumbName="Menu" path="menu" getComponent={Menu} />
