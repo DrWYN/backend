@@ -3,7 +3,7 @@ const initState = {
 	text: ''
 }
 
-export default function test(state=initState, action){
+export function test(state=initState, action){
 	switch (action.type){
 		case 'text_action':
 			return Object.assign({}, state, {text: action.text});

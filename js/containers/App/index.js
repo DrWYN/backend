@@ -23,13 +23,13 @@ const App = React.createClass({
           </div>
           <div className="ant-layout-container">
             <div className="ant-layout-content">
-              <div style={{ height: 220 }}>
+              <div>
                 {this.props.children}
               </div>
             </div>
           </div>
           <div className="ant-layout-footer">
-          © 2016 由 走客 支持
+          © 2016 由 XX 支持
           </div>
         </div>
       </div>

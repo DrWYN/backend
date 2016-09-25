@@ -39,11 +39,12 @@ export default {
                     }
                 })
                 .then((response) => {
-                    if (response && response.error_code === 0) {
-                        resolve(response)//response.error_code 是与服务器端的约定，非0就是错误
-                    } else {
-                        reject(response.message)//response.message也是与服务器端的约定，error_code !==0 就需要返回message
-                    }
+                  resolve(response)
+                    // if (response && response.error_code === 0) {
+                    //     resolve(response)//response.error_code 是与服务器端的约定，非0就是错误
+                    // } else {
+                    //     reject(response.message)//response.message也是与服务器端的约定，error_code !==0 就需要返回message
+                    // }
                 })
                 .catch((err)=> {
                     reject(_parseErrorMsg(err))
