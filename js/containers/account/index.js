@@ -24,33 +24,48 @@ class Account extends Component{
 
     render(){
         const columns = [{
-          title: '姓名',
+          title: 'id',
+          dataIndex: 'id',
+          key: 'id',
+          sorter: (a, b) => a.id - b.id,
+          render: (text) => <a href="#">{text}</a>,
+        }, {
+          title: '名称',
           dataIndex: 'name',
           key: 'name',
           sorter: (a, b) => a.name.length - b.name.length,
-          render: (text) => <a href="#">{text}</a>,
         }, {
-          title: '年龄',
-          dataIndex: 'age',
-          key: 'age',
-          sorter: (a, b) => a.age - b.age,
+          title: '微信号',
+          dataIndex: 'wechat_id',
+          key: 'wechat_id',
+          sorter: (a, b) => a.wechat_id.length - b.wechat_id.length,
         }, {
-          title: '住址',
-          dataIndex: 'address',
-          key: 'address',
-          sorter: (a, b) => a.address.length - b.address.length,
+          title: '类型',
+          dataIndex: 'type',
+          key: 'type',
+          sorter: (a, b) => a.type.length - b.type.length,
+        }, {
+          title: '原始id',
+          dataIndex: 'o_id',
+          key: 'o_id',
+          sorter: (a, b) => a.o_id.length - b.o_id.length,
+        }, {
+          title: '关注人数',
+          dataIndex: 'number',
+          key: 'number',
+          sorter: (a, b) => a.number - b.number,
+        }, {
+          title: 'xxx',
+          dataIndex: 'xxx',
+          key: 'xxx',
         }, {
           title: '操作',
           key: 'operation',
           render: (text, record) => (
             <span>
-              <a href="#">操作一{record.name}</a>
+              <a href="#">操作一{/*record.name*/}</a>
               <span className="ant-divider"></span>
               <a href="#">操作二</a>
-              <span className="ant-divider"></span>
-              <a href="#" className="ant-dropdown-link">
-                更多 <Icon type="down" />
-              </a>
             </span>
           ),
         }];
