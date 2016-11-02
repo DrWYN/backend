@@ -31,7 +31,13 @@
             margin: 0 10px;
         }
     }
-    .menu-manage-container{
-
+    
+    .menu-manage-body{
+        .menu-panel-header{
+            &>button{
+                border: none;
+            }
+        }
     }
+    
 }

@@ -1,6 +1,6 @@
 // menu 菜单管理
 import React, {Component} from 'react';
-import { Button, Table, Select, Collapse } from 'antd';
+import { Button, Table, Select, Collapse, Icon } from 'antd';
 
 import './menu.scss';
 
@@ -34,8 +34,11 @@ class MenuManage extends Component{
   //渲染折叠菜单header   add/edit/delete
   renderPanelHeader(item){
     return (
-      <div className="menu-panel-header">
-        <span>{item.name}</span>
+      <div className="flex flex-center-h menu-panel-header">
+        <span className="flex-1">{item.name}</span>
+        <Button icon="plus"/>
+        <Button icon="edit"/>
+        <Button icon="delete"/>
       </div>
     )
   }
