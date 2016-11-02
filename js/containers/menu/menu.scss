@@ -1,0 +1,37 @@
+.menu-page-container{
+    .normal-buttom-border{
+        border-bottom: solid 1px #eee;
+    }
+    .choose-account{
+        padding: 10px;
+        @extend .normal-buttom-border;
+    }
+    .table-container{
+        .table-border{
+            border: solid 1px #eee;
+            &>.flex-1{
+                border-right: solid 1px #000;
+            }
+        }
+        .table-tips{
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+    .menu-manage-head{
+        @extend .normal-buttom-border;
+        background: #f0f0f0;
+        height: 30px;
+        padding: 5px;
+        &>span{
+            font-size: 16px;
+            margin-right: 20px;
+        }
+        &>button{
+            margin: 0 10px;
+        }
+    }
+    .menu-manage-container{
+
+    }
+}

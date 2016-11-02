@@ -5,8 +5,6 @@ import { Table, Button, Icon } from 'antd';
 import { connect } from 'react-redux';
 import bindActions from '../../actions/bind';
 
-import {Link} from 'react-router';
-
 
 class Account extends Component{
     constructor(props){
@@ -71,17 +69,17 @@ class Account extends Component{
         }];
 
         // 通过 rowSelection 对象表明需要行选择
-        const rowSelection = {
-          onChange(selectedRowKeys, selectedRows) {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-          },
-          onSelect(record, selected, selectedRows) {
-            console.log(record, selected, selectedRows);
-          },
-          onSelectAll(selected, selectedRows, changeRows) {
-            console.log(selected, selectedRows, changeRows);
-          },
-        };
+        // const rowSelection = {
+        //   onChange(selectedRowKeys, selectedRows) {
+        //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        //   },
+        //   onSelect(record, selected, selectedRows) {
+        //     console.log(record, selected, selectedRows);
+        //   },
+        //   onSelectAll(selected, selectedRows, changeRows) {
+        //     console.log(selected, selectedRows, changeRows);
+        //   },
+        // };
 
         const pagination = {
           total: this.props.data.length,
@@ -95,9 +93,9 @@ class Account extends Component{
         };
 
         return (
-            <div>
+            <div className="account-page-container">
                 <div>Account</div>
-                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.data} pagination={pagination} onChange={this.onChange.bind(this)}/>
+                <Table columns={columns} dataSource={this.props.data} pagination={pagination} onChange={this.onChange.bind(this)}/>
             </div>
         );
     }
