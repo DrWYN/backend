@@ -33,10 +33,11 @@
     }
     
     .menu-manage-body{
-        .menu-panel-header{
-            &>button{
-                border: none;
-            }
+        button{
+            border: none;
+        }
+        .second-menu-item{
+            padding: 5px 0;
         }
     }
     
