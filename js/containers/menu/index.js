@@ -1,6 +1,7 @@
 // menu 菜单管理
 import React, {Component} from 'react';
-import { Button, Table, Select, Collapse, Icon, Modal, message } from 'antd';
+import {findDOMNode} from 'react-dom';
+import { Button, Table, Select, Collapse, Icon, Modal, Input, message } from 'antd';
 
 import './menu.scss';
 
@@ -15,55 +16,40 @@ class MenuManage extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      addMenuLv: 0, //点击的是添加几级菜单  1 - 1 2 - 2
-      addIndex: 0,  //添加第几个主菜单的二级菜单
+      // addMenuLv: 0, //点击的是添加几级菜单  1 - 1 2 - 2
+      // addIndex: 0,  //添加第几个主菜单的二级菜单
       modalVisible: false, //modal显示和隐藏
       errorMsg: ""  //错误提示语
     }
-    // this.addTopMenu = this.addTopMenu.bind(this);
-    // this.editTopMenu = this.editTopMenu.bind(this);
-    // this.deleteTopMenu = this.deleteTopMenu.bind(this);
+    this.addMenuLv = 0;//点击的是添加几级菜单  1 - 1 2 - 2
+    this.addIndex = 0;//添加第几个主菜单的二级菜单
 
-    // this.sortMenu = this.sortMenu.bind(this);
     this.collapseChange = this.collapseChange.bind(this);
     this.renderPanelHeader = this.renderPanelHeader.bind(this);
 
     this.showModal = this.showModal.bind(this);
     this.handleOk = this.handleOk.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
-
-    // this.addSecondMenu = this.addSecondMenu.bind(this);
-    // this.editSecondMenu = this.editSecondMenu.bind(this);
-    // this.deleteSecondMenu = this.deleteSecondMenu.bind(this);
   }
   //显示弹框
-  showModal(level, index){
-    this.setState({addMenuLv: level, addIndex: index, modalVisible: true});
+  showModal(){
+    this.setState({modalVisible: true});
   }
   //隐藏弹框
   hideModal(){
-    this.setState({addMenuLv: 0, addIndex: 0, modalVisible: false});
+    this.setState({modalVisible: false});
+    this.addMenuLv = 0;
+    this.addIndex = 0;
+    //清空input输入框
+    findDOMNode(this.refs.nameInput).value = "";
   }
   //弹框ok
   handleOk(){
 
-    let text = "新添加的菜单";
-    let {menus={}} = this.props;
-    let {button=[]} = menus;
-
-    let addTemp = {
-      type: "view", 
-      name: text, 
-      url: "", 
-      key: ""
-    }
-
-    if(this.state.addMenuLv === 1){ //添加主菜单
-      addTemp.sub_button = [];
-      button.push(addTemp);
-    }else if(this.state.addMenuLv === 2){ //添加二级菜单
-      button[this.state.addIndex].sub_button.push(addTemp);
-    }
+    // let name = "新添加的菜单";
+    let name = findDOMNode(this.refs.nameInput).value;
+  
+    bindActions.addMenu(this.addMenuLv, this.addIndex, name);
     this.hideModal();
   }
   //弹框calcel
@@ -76,46 +62,66 @@ class MenuManage extends Component{
     // console.log('------click addTopMenu');
     let {menus={}} = this.props;
     let {button=[]} = menus;
-    if(button.length > 3){
+    if(button.length > 2){
       message.error('主菜单最多3个！！！');
       return;
     }
-    this.showModal(1, 0);
+    this.addMenuLv = 1;
+    this.showModal();
   }
   //编辑一级菜单
   editTopMenu(menu, index, e){
-    console.log('--------editTopMenu ', menu);
+    console.log('--------editTopMenu ', index);
+    let {editOpt} = this.props;
+    editOpt&&editOpt(1, index);
     e.preventDefault();
     e.stopPropagation();
   }
   //删除一级菜单
   deleteTopMenu(menu, index, e){
-    console.log('--------deleteTopMenu ', menu);
+    // console.log('--------deleteTopMenu ', index);
+    let {menus={}} = this.props;
+    let {button=[]} = menus;
+    Modal.warning({
+      title: "删除主菜单",
+      content: `确定删除第${index+1}级主菜单吗？`,
+      onOk: ()=>{bindActions.deleteMenu(1, index)}
+    })
     e.preventDefault();
     e.stopPropagation();
   }
   //添加二级菜单
   addSecondMenu(menu, index, e){
-    // console.log('-------addSecondMenu ', menu);
-    if(menu.sub_button.length > 5){
+    // console.log('-------addSecondMenu ', index);
+    if(menu.sub_button.length > 4){
       message.error('二级菜单最多5个！！！');
       e.preventDefault();
       e.stopPropagation();
       return;
     }
-    this.showModal(2, index);
+    this.addMenuLv = 2;
+    this.addIndex = index;
+    this.showModal();
     e.preventDefault();
     e.stopPropagation();
   }
   //编辑二级菜单
-  editSecondMenu(button, e){
-    console.log('-------editSecondMenu ', button);
+  editSecondMenu(sub_button, topindex, secIndex, e){
+    console.log('-------editSecondMenu ', secIndex);
+    let {editOpt} = this.props;
+    editOpt&&editOpt(2, topindex, secIndex);
     e.preventDefault();
     e.stopPropagation();
   }
   //删除二级菜单
-  deleteSecondMenu(button, e){
-    console.log('----------- deleteSecondMenu ', button);
+  deleteSecondMenu(sub_button, topindex, secIndex, e){
+    // console.log('----------- deleteSecondMenu ', secIndex);
+  
+    Modal.warning({
+      title: "删除该菜单",
+      content: `确定删除第${secIndex+1}级子菜单吗？`,
+      onOk: ()=>{bindActions.deleteMenu(2, topindex, secIndex)}
+    })
     e.preventDefault();
     e.stopPropagation();
   }
@@ -141,7 +147,9 @@ class MenuManage extends Component{
   render(){
     let {menus={}} = this.props;
     let {button=[]} = menus;
-    if(!button.length) return null;
+
+    let display = button.length ? "block" : "none";
+    // if(!button.length) return null;
 
     return (
       <div className="menu-manage-container">
@@ -150,19 +158,19 @@ class MenuManage extends Component{
           <Button onClick={this.addTopMenu.bind(this)}>添加</Button>
           <Button onClick={this.sortMenu.bind(this)}>排序</Button>
         </div>
-        <div className="menu-manage-body">
+        <div className="menu-manage-body" style={{display: display}}>
           <Collapse onChange={this.collapseChange}>
           {
             button.map((menu, index)=>{
               return (
                 <Panel key={index} header={this.renderPanelHeader(menu, index)}>
                 {
-                  menu.sub_button&&menu.sub_button.length ? menu.sub_button.map((button, index)=>{
+                  menu.sub_button&&menu.sub_button.length ? menu.sub_button.map((sub_button, subIndex)=>{
                     return (
-                      <div key={index} className="flex flex-center-h second-menu-item">
-                        <div className="flex-1">{button.name}</div>
-                        <Button type="ghost" icon="edit" onClick={this.editSecondMenu.bind(this, button)}/>
-                        <Button type="ghost" icon="delete" onClick={this.deleteSecondMenu.bind(this, button)}/>
+                      <div key={subIndex} className="flex flex-center-h second-menu-item">
+                        <div className="flex-1">{sub_button.name}</div>
+                        <Button type="ghost" icon="edit" onClick={this.editSecondMenu.bind(this, sub_button, index, subIndex)}/>
+                        <Button type="ghost" icon="delete" onClick={this.deleteSecondMenu.bind(this, sub_button, index, subIndex)}/>
                       </div>
                     )
                   }) : null
@@ -173,12 +181,11 @@ class MenuManage extends Component{
           }
           </Collapse>
         </div>
-        <Modal title="" visible={this.state.modalVisible}
+        <Modal title="" closable={false} visible={this.state.modalVisible}
           onOk={this.handleOk} onCancel={this.handleCancel}
         >
-          <p>some contents...</p>
-          <p>some contents...</p>
-          <p>some contents...</p>
+          <span>name:</span>
+          <input type="text" ref="nameInput"/>
         </Modal>
       </div>
     )
@@ -189,37 +196,155 @@ class MenuManage extends Component{
 class SetEvent extends Component{
   constructor(props) {
     super(props);
+    
+    this.handleTypeChange = this.handleTypeChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleUrlChange = this.handleUrlChange.bind(this);
+    this.handleKeyChange = this.handleKeyChange.bind(this);
+
+    this.saveChange = this.saveChange.bind(this);  
+    this.state = {
+      type: 'view',
+      name: '',
+      url: '',
+      key: ''
+    };
+    this.defaultValue = {
+      type: 'view',
+      name: '',
+      url: '',
+      key: ''
+    };
+}
+  componentDidMount(){
+   
+  }
+  componentWillReceiveProps(nextProps){
+    if(JSON.stringify(this.props) !== JSON.stringify(nextProps)){
+      this.changeState(nextProps);
+    }
+  }
+  changeState(props){
+    let {menus, editData={}} = props;
+    let {level, topIndex=0, secIndex=0} = editData;
+    let defaultValue = {};
+    if(level === 1){
+      let obj = menus.button[topIndex] || this.defaultValue;
+      defaultValue.type = obj.type;
+      defaultValue.name = obj.name;
+      defaultValue.url = obj.url;
+      defaultValue.key = obj.key;
+    }else if(level === 2){
+      let obj = menus.button[topIndex].sub_button[secIndex] || this.defaultValue;
+      defaultValue.type = obj.type;
+      defaultValue.name = obj.name;
+      defaultValue.url = obj.url;
+      defaultValue.key = obj.key;
+    }
+    this.setState({type: defaultValue.type, name: defaultValue.name, url: defaultValue.url, key: defaultValue.key})
+  }
+  handleTypeChange(value){
+    this.setState({type: value});
+  }
+  handleNameChange(e){
+    this.setState({name: e.target.value});
+  }
+  handleUrlChange(e){
+    this.setState({url: e.target.value});
+  }
+  handleKeyChange(e){
+    this.setState({key: e.target.value});
+  }
+  saveChange(){
+    console.log('----->>>save = ', this.state);
+    let {menus, editData={}} = this.props;
+    let {level, topIndex=0, secIndex=0} = editData;
+    bindActions.editMenu(level, topIndex, secIndex, this.state);
   }
   render(){
+    let {menus, editData={}} = this.props;
+    let {level, topIndex=0, secIndex=0} = editData;
+
+    let display = level ? "block" : "none";
+
+    // let defaultValue = {};
+    // if(level === 1){
+    //   let obj = menus.button[topIndex];
+    //   defaultValue.type = obj.type;
+    //   defaultValue.name = obj.name;
+    //   defaultValue.url = obj.url;
+    //   defaultValue.key = obj.key;
+    // }else if(level === 2){
+    //   let obj = menus.button[topIndex].sub_button[secIndex];
+    //   defaultValue.type = obj.type;
+    //   defaultValue.name = obj.name;
+    //   defaultValue.url = obj.url;
+    //   defaultValue.key = obj.key;
+    // }
     return (
       <div className="set-event-container">
         <div className="flex flex-center-h menu-manage-head">
           <span>设置动作</span>
+        </div>
+        <div className="flex flex-column menu-manage-body" style={{display: display}}>
+          <div className="flex body-item-container">
+            <span>type:</span>
+            <Select value={this.state.type} style={{ width: 200 }} onChange={this.handleTypeChange}>
+              <Option value="view">跳转URL</Option>
+              <Option value="click">点击推事件</Option>
+              <Option value="scancode_push">扫码推事件</Option>
+              <Option value="pic_sysphoto">弹出系统拍照发图</Option>
+              <Option value="location_select">弹出地理位置选择器</Option>
+            </Select>
+          </div>
+          <div className="flex body-item-container">
+            <span>name:</span>
+            <input type="text" value={this.state.name} onChange={this.handleNameChange}/>
+          </div>
+          <div className="flex body-item-container">
+            <span>url:</span>
+            <input type="text" value={this.state.url} onChange={this.handleUrlChange}/>
+          </div>
+          <div className="flex body-item-container">
+            <span>key:</span>
+            <input type="text" value={this.state.key} onChange={this.handleKeyChange}/>
+          </div>
+          <div className="flex body-item-container">
+            <Button type="primary" onClick={this.saveChange}>save</Button>
+          </div>
         </div>
       </div>
     )
   }
 }
 
-export default class Menu extends Component{
+class Menu extends Component{
     constructor(props){
         super(props);
-        this.state={
-          data: {
-            accounts: [{id: 1, name: "走客服务号"}, {id: 2, name: "行程定制服务号"}, {id: 3, name: "行程规划订阅号"}],
-            menus: {button:[
-                {type: "view", name: "主菜单1", url: "", key: "", sub_button: []},
-                {type: "view", name: "主菜单2", url: "", key: "", sub_button: [
-                  {type: "view", name: "子菜单21", url: "", key: ""}
-                ]},
-              ]}
+        this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.editOpt = this.editOpt.bind(this);
+        this.state = {
+          editData: {
+            level: 0,
+            topIndex: 0,
+            secIndex: 0
           }
         }
-        this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
     componentDidMount(){
-        
+        //拉数据
+    }
+    //点击编辑按钮
+    editOpt(level, topIndex, secIndex){
+      console.log('------>>>>>editOpt = ');
+      this.setState({
+        editData: {
+          level: level,
+          topIndex: topIndex,
+          secIndex: secIndex
+        }
+      })
     }
 
     handleSelectChange(value){
@@ -227,7 +352,7 @@ export default class Menu extends Component{
     }
 
     render(){
-        let {accounts, menus} = this.state.data;
+        let {accounts, menus} = this.props.data;
         return (
             <div className="menu-page-container">
                 <div className="choose-account">
@@ -249,10 +374,10 @@ export default class Menu extends Component{
                   <div className="table-tips">可创建最多三个一级菜单，每一级菜单下可创建最多5个二级菜单！</div>
                   <div className="flex table-border">
                     <div className="flex-1">
-                      <MenuManage menus={menus}/>
+                      <MenuManage menus={menus} editOpt={this.editOpt}/>
                     </div>
                     <div className="flex-2">
-                      <SetEvent/>
+                      <SetEvent menus={menus} editData={this.state.editData}/>
                     </div>
                   </div>
                 </div>
@@ -260,6 +385,13 @@ export default class Menu extends Component{
         );
     }
 }
+
+function mapStateToProps(state){
+  let {data} = state.zk_menu;
+  return {data};
+}
+
+export default connect(mapStateToProps)(Menu);
 
 
 
