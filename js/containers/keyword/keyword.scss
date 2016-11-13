@@ -1,0 +1,17 @@
+.keyword-page-container{
+    .normal-buttom-border{
+        border-bottom: solid 1px #eee;
+    }
+    .choose-account{
+        padding: 10px;
+        @extend .normal-buttom-border;
+    }
+    .button-container{
+        margin: 20px 0;
+    }
+    .table-container{
+        button{
+            border: none;
+        }
+    }
+}

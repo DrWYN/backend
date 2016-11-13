@@ -1,0 +1,12 @@
+.attention-page-container{
+    .normal-buttom-border{
+        border-bottom: solid 1px #eee;
+    }
+    .choose-account{
+        padding: 10px;
+        @extend .normal-buttom-border;
+    }
+    .table-container{
+        margin: 10px 0;
+    }
+}

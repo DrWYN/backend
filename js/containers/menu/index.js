@@ -1,7 +1,7 @@
 // menu 菜单管理
 import React, {Component} from 'react';
 import {findDOMNode} from 'react-dom';
-import { Button, Table, Select, Collapse, Icon, Modal, Input, message } from 'antd';
+import { Button, Table, Select, Collapse, Icon, Modal, Input, Alert, message } from 'antd';
 
 import './menu.scss';
 
@@ -371,7 +371,7 @@ class Menu extends Component{
                   </Select>
                 </div>
                 <div className="table-container">
-                  <div className="table-tips">可创建最多三个一级菜单，每一级菜单下可创建最多5个二级菜单！</div>
+                  <Alert message="可创建最多三个一级菜单，每一级菜单下可创建最多5个二级菜单！" type="warning" />
                   <div className="flex table-border">
                     <div className="flex-1">
                       <MenuManage menus={menus} editOpt={this.editOpt}/>
