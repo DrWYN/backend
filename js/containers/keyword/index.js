@@ -5,15 +5,14 @@ import {findDOMNode} from 'react-dom';
 import { connect } from 'react-redux';
 import bindActions from '../../actions/bind';
 
-import {Link} from 'react-router';
 import './keyword.scss';
 
-import { Button, Table, Select, Collapse, Icon, Modal, Input, Popconfirm, message } from 'antd';
+import { Button, Table, Select, Modal, Input, Popconfirm, message } from 'antd';
 
 const Option = Select.Option;
 
 
-export default class Keyword extends Component{
+class Keyword extends Component{
     constructor(props){
         super(props);
     }
@@ -38,10 +37,12 @@ export default class Keyword extends Component{
     }
 
     render(){
-        let accounts = [{id: 1, name: "走客服务号"}, {id: 2, name: "行程定制服务号"}, {id: 3, name: "行程规划订阅号"}];
-        let data = [{id: 60001, account: "走客-服务号", key_word: "zouke-test", type: "text", desc: 'id'}, 
-            {id: 60002, account: "行程定制-服务号", key_word: "zktravel", type: "text", desc: 'id'},
-            {id: 60003, account: "走客-服务号", key_word: "myzouke", type: "pic", desc: 'id'}]
+        // let accounts = [{id: 1, name: "走客服务号"}, {id: 2, name: "行程定制服务号"}, {id: 3, name: "行程规划订阅号"}];
+        // let data = [{id: 60001, account: "走客-服务号", key_word: "zouke-test", type: "text", desc: 'id'}, 
+        //     {id: 60002, account: "行程定制-服务号", key_word: "zktravel", type: "text", desc: 'id'},
+        //     {id: 60003, account: "走客-服务号", key_word: "myzouke", type: "pic", desc: 'id'}]
+
+        let {accounts, messages} = this.props.data;
 
         const columns = [{
           title: 'id',
@@ -87,7 +88,7 @@ export default class Keyword extends Component{
           ),
         }];
         const pagination = {
-          total: data.length,
+          total: messages.length,
           showSizeChanger: true,
           onShowSizeChange(current, pageSize) {
             console.log('Current: ', current, '; PageSize: ', pageSize);
@@ -121,14 +122,21 @@ export default class Keyword extends Component{
                   </div>
                   <div className="table-container">
                     <div>消息列表</div>
-                    <Table columns={columns} dataSource={data} pagination={pagination} onChange={this.onChange.bind(this)}/>
+                    <Table columns={columns} dataSource={messages} pagination={pagination} onChange={this.onChange.bind(this)}/>
                   </div>
                 </div>
-                
+
             </div>
         );
     }
 }
+
+function mapStateToProps(state){
+  let {data} = state.zk_keyword;
+  return {data};
+}
+
+export default connect(mapStateToProps)(Keyword);
 
 
 
