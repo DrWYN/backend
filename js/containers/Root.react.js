@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Router, Route, Link, IndexRoute, Redirect } from 'react-router';
-import {hashHistory} from 'react-router';
+import { Router, Route, Link, IndexRoute, Redirect, useRouterHistory } from 'react-router';
+import { createHashHistory } from 'history'
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
@@ -8,10 +8,18 @@ import App from './app/';
 
 import store from '../store/configureStore';
 
+const appHistory = useRouterHistory(createHashHistory)({ queryKey: false })
+
 
 const Home = (location, cb) => {
             require.ensure([], require => {
                 cb(null, require('./Home.react').default)
+            })
+        };
+//登录
+const Login = (location, cb) => {
+            require.ensure([], require => {
+                cb(null, require('./login').default)
             })
         };
 //账号管理
@@ -74,7 +82,8 @@ export default class Root extends Component {
     render(){
         return (
             <Provider  store={store}>
-                <Router history={hashHistory}>
+                <Router history={appHistory}>
+                <Route name="login" breadcrumbName="login" path="login" getComponent={Login}/>
                     <Route onEnter={this.canUse} component={App}>
                         <Route name="home" breadcrumbName="/" path="/" getComponent={Home} />
                         <Route name="account" breadcrumbName="Account" path="account" getComponent={Account} />

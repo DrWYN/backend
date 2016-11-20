@@ -1,0 +1,23 @@
+.login-page-container{
+    text-align: center;
+    .show{
+        display: block;
+    }
+    .hide{
+        display: none;
+    }
+    .form-container{
+        width: 400px;
+        margin: 20px auto;
+        padding: 10px;
+        .ant-checkbox-wrapper{
+            float: left;
+        }
+        .login-form-button{
+            width: 80%;
+        }
+        .footer-item{
+            margin: auto 10px;
+        }
+    }
+}
