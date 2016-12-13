@@ -11,11 +11,74 @@ import { Button, Table, Select, Modal, Input, Popconfirm, message } from 'antd';
 
 const Option = Select.Option;
 
+class TextTypeModal extends Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      keyword: '',
+      content: ''
+    }
+  }
+
+  handleOk(){
+    let {modalOK} = this.props;
+    modalOK && modalOK();
+  }
+  
+  handleCancel(){
+    let {closeModal} = this.props;
+    closeModal && closeModal();
+  }
+
+  keywordChange(e){
+    let value = e.target.value;
+    console.log('---->>>>keyword = ', value);
+    this.setState({keyword: value});
+  }
+
+  contentChange(e){
+    let content = e.target.value;
+    console.log('--->>>content = ', content);
+    this.setState({content: content});
+  }
+  
+  render(){
+    return (
+      <div>
+        <Modal title="关键字回复" visible={this.props.visible}
+          onOk={()=>{this.handleOk()}} onCancel={()=>{this.handleCancel()}}>
+          <div>
+            <Input addonBefore="关键字：" value={this.state.keyword} onChange={(e)=>{this.keywordChange(e)}}/>
+          </div>
+          <div style={{marginTop: '10px'}}>
+            <Input type="textarea" placeholder="自动回复内容" value={this.state.content} autosize={{ minRows: 2, maxRows: 6 }} onChange={(e)=>{this.contentChange(e)}}/>
+          </div>
+        </Modal>
+      </div>
+    );
+  }
+}
+
 
 class Keyword extends Component{
     constructor(props){
         super(props);
+        this.state = {
+          textModalVisible: false,
+          picModalVisible: false
+        }
     }
+
+    showTextModal(){
+      this.setState({textModalVisible: true});
+    }
+    closeTextModal(){
+      this.setState({textModalVisible: false});
+    }
+    textModalOK(){
+      this.setState({textModalVisible: false});
+    }
+
 
     handleSelectChange(value){
       console.log(`select ${value}`);
@@ -117,7 +180,7 @@ class Keyword extends Component{
                 </div>
                 <div className="body-container">
                   <div className="button-container">
-                    <Button>文字回复</Button>
+                    <Button onClick={()=>{this.showTextModal()}}>文字回复</Button>
                     <Button>图文回复</Button>
                   </div>
                   <div className="table-container">
@@ -125,7 +188,7 @@ class Keyword extends Component{
                     <Table columns={columns} dataSource={messages} pagination={pagination} onChange={this.onChange.bind(this)}/>
                   </div>
                 </div>
-
+                <TextTypeModal visible={this.state.textModalVisible} closeModal={()=>{this.closeTextModal()}} modalOK={(data)=>{this.textModalOK(data)}}/>
             </div>
         );
     }

@@ -13,8 +13,7 @@ const Sider = React.createClass({
   handleClick(e) {
     console.log('click ', e);
     this.setState({
-      current: e.key,
-      openKeys: e.keyPath.slice(1),
+      current: e.key
     });
   },
   onToggle(openKeys) {
@@ -22,13 +21,32 @@ const Sider = React.createClass({
     //   openKeys: info.open ? info.keyPath : info.keyPath.slice(1),
     // });
   },
+  onOpenChange(openKeys) {
+    const state = this.state;
+    const latestOpenKey = openKeys.find(key => !(state.openKeys.indexOf(key) > -1));
+    const latestCloseKey = state.openKeys.find(key => !(openKeys.indexOf(key) > -1));
+
+    let nextOpenKeys = [];
+    if (latestOpenKey) {
+      nextOpenKeys = this.getAncestorKeys(latestOpenKey).concat(latestOpenKey);
+    }
+    if (latestCloseKey) {
+      nextOpenKeys = this.getAncestorKeys(latestCloseKey);
+    }
+    this.setState({ openKeys: nextOpenKeys });
+  },
+  getAncestorKeys(key) {
+    const map = {
+    };
+    return map[key] || [];
+  },
   render() {
     return (
       <Menu onClick={this.handleClick}
         theme="light"
         style={{ width: 240 }}
         openKeys={this.state.openKeys}
-        onOpenChange={this.onToggle}
+        onOpenChange={this.onOpenChange}
         selectedKeys={[this.state.current]}
         mode="inline"
       >
