@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Menu, Breadcrumb, Icon } from 'antd';
+import { Button, Menu, Breadcrumb, Icon } from 'antd';
+import { Link } from 'react-router';
 import './app.scss';
 
-import Sider from '../../components/Sider';
+import Sider from '../../components/sider';
 
 
 const SubMenu = Menu.SubMenu;
@@ -12,7 +13,14 @@ const App = React.createClass({
   render() {
     return (
       <div className="app-page-container">
-        <div className="ant-layout-header">微信平台</div>
+        <div className="ant-layout-header flex">
+          <div className="flex flex-1 flex-center-h">
+            微信平台
+          </div>
+          <div className="login">
+            <Link to='/login'>登录</Link>
+          </div>
+        </div>
         <aside className="ant-layout-sider">
           <Sider/>
         </aside>

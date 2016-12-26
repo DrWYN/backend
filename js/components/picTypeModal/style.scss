@@ -1,0 +1,18 @@
+.pic-type-modal-container{
+    .pic-type-item-container{
+        border: 1px solid grey;
+        border-radius: 5px;
+        background: #ebebeb;
+        margin-top: 10px;
+        font-size: .9rem;
+        .ant-btn{
+            margin: 5px;
+        }
+    }
+    .pic-type-item-handle{
+        background: lightgrey;
+    }
+    .pic-type-item{
+
+    }
+}

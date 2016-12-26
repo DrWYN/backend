@@ -5,59 +5,15 @@ import {findDOMNode} from 'react-dom';
 import { connect } from 'react-redux';
 import bindActions from '../../actions/bind';
 
+import TextTypeModal from '../../components/textTypeModal';
+import PicTypeModal from '../../components/picTypeModal';
+
 import './keyword.scss';
 
 import { Button, Table, Select, Modal, Input, Popconfirm, message } from 'antd';
 
 const Option = Select.Option;
 
-class TextTypeModal extends Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      keyword: '',
-      content: ''
-    }
-  }
-
-  handleOk(){
-    let {modalOK} = this.props;
-    modalOK && modalOK();
-  }
-  
-  handleCancel(){
-    let {closeModal} = this.props;
-    closeModal && closeModal();
-  }
-
-  keywordChange(e){
-    let value = e.target.value;
-    console.log('---->>>>keyword = ', value);
-    this.setState({keyword: value});
-  }
-
-  contentChange(e){
-    let content = e.target.value;
-    console.log('--->>>content = ', content);
-    this.setState({content: content});
-  }
-  
-  render(){
-    return (
-      <div>
-        <Modal title="关键字回复" visible={this.props.visible}
-          onOk={()=>{this.handleOk()}} onCancel={()=>{this.handleCancel()}}>
-          <div>
-            <Input addonBefore="关键字：" value={this.state.keyword} onChange={(e)=>{this.keywordChange(e)}}/>
-          </div>
-          <div style={{marginTop: '10px'}}>
-            <Input type="textarea" placeholder="自动回复内容" value={this.state.content} autosize={{ minRows: 2, maxRows: 6 }} onChange={(e)=>{this.contentChange(e)}}/>
-          </div>
-        </Modal>
-      </div>
-    );
-  }
-}
 
 
 class Keyword extends Component{
@@ -69,14 +25,28 @@ class Keyword extends Component{
         }
     }
 
+    //文字消息回复弹框
     showTextModal(){
       this.setState({textModalVisible: true});
     }
     closeTextModal(){
       this.setState({textModalVisible: false});
     }
-    textModalOK(){
+    textModalOK(data){
+      console.log('--->>>>>data = ', data);
       this.setState({textModalVisible: false});
+    }
+
+    //图文消息回复弹框
+    showPicModal(){
+      this.setState({picModalVisible: true});
+    }
+    closePicModal(){
+      this.setState({picModalVisible: false});
+    }
+    picModalOK(data){
+      console.log('--->>>>>data = ', data);
+      this.setState({picModalVisible: false});
     }
 
 
@@ -181,7 +151,7 @@ class Keyword extends Component{
                 <div className="body-container">
                   <div className="button-container">
                     <Button onClick={()=>{this.showTextModal()}}>文字回复</Button>
-                    <Button>图文回复</Button>
+                    <Button onClick={()=>{this.showPicModal()}}>图文回复</Button>
                   </div>
                   <div className="table-container">
                     <div>消息列表</div>
@@ -189,6 +159,7 @@ class Keyword extends Component{
                   </div>
                 </div>
                 <TextTypeModal visible={this.state.textModalVisible} closeModal={()=>{this.closeTextModal()}} modalOK={(data)=>{this.textModalOK(data)}}/>
+                <PicTypeModal visible={this.state.picModalVisible} closeModal={()=>{this.closePicModal()}} modalOK={(data)=>{this.picModalOK(data)}}/>
             </div>
         );
     }
